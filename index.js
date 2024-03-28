@@ -2,15 +2,12 @@ require('dotenv').config();
 const { Client } = require("pg");
 const express = require("express");
 
-const dbConfig = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-};
+// Using DATABASE_URL from environment so that I wouldn't have to implement a separate config file for the database connection
+const connectionString = process.env.DATABASE_URL || "postgres://localhost/flavors_db";
+const client = new Client({
+  connectionString: connectionString
+});
 
-const client = new Client(dbConfig);
 const app = express();
 app.use(express.json());
 app.use(require("morgan")("dev"));
